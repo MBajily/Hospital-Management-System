@@ -73,3 +73,36 @@ class Kin(models.Model):
 
 	def __str__(self):
 		return "{} for {}".format(self.full_name)
+
+
+
+#===============================================================
+#========================  Hospital  ===========================
+#===============================================================
+class Hospital(models.Model):
+	hospital_id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=100)
+	email = models.EmailField(max_length=200, unique=True)
+	username = models.CharField(max_length=50, unique=True)
+	logo = models.ImageField(null=True, blank=True)
+	password = models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.name
+
+
+
+#===============================================================
+#========================  Hospital's Stuff  ===========================
+#===============================================================
+class Stuff(models.Model):
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=100)
+	email = models.EmailField(max_length=200, unique=True)
+	username = models.CharField(max_length=50, unique=True)
+	role = models.CharField(max_length=100, null=True)
+	password = models.CharField(max_length=100)
+	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+
+	def __str__(self):
+		return self.name
