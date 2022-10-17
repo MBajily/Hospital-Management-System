@@ -18,12 +18,10 @@ class Civil_Status(models.Model):
 		('Sudanese', 'Sudanese - سوداني'),
 		('Non-sudanese', 'Non-sudanese - غير سوداني')
 	)
-
-	nationality_id = models.AutoField(primary_key=True)
+	nationality_id = models.CharField(primary_key=True, max_length=20, unique=True)
 	full_name = models.CharField(max_length=200, null=True)
 	birth = models.DateField()
 	gender = models.CharField(max_length=200, null=True, choices=Genders)
-	nationality = models.CharField(max_length=200, null=True, choices=Nationality)
 
 	def __str__(self):
 		return self.full_name
@@ -83,8 +81,8 @@ class Hospital(models.Model):
 	hospital_id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)
 	email = models.EmailField(max_length=200, unique=True)
-	username = models.CharField(max_length=50, unique=True)
 	logo = models.ImageField(null=True, blank=True)
+	username = models.CharField(max_length=50, unique=True)
 	password = models.CharField(max_length=100)
 
 	def __str__(self):
@@ -93,16 +91,52 @@ class Hospital(models.Model):
 
 
 #===============================================================
-#========================  Hospital's Stuff  ===========================
+#====================  Hospital's Stuff  =======================
 #===============================================================
 class Stuff(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)
 	email = models.EmailField(max_length=200, unique=True)
-	username = models.CharField(max_length=50, unique=True)
-	role = models.CharField(max_length=100, null=True)
-	password = models.CharField(max_length=100)
 	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+	role = models.CharField(max_length=100, null=True)
+	username = models.CharField(max_length=50, unique=True)
+	password = models.CharField(max_length=100)
+	
+
+	def __str__(self):
+		return self.name
+
+
+
+#===============================================================
+#=================  Medical Examinations  ======================
+#===============================================================
+class Medical_Examination(models.Model):
+
+	Types = (
+		("Biopsy","Biopsy"),
+		("Colonoscopy","Colonoscopy"),
+		("CT scan","CT scan"),
+		("CT scans and radiation exposure in children and young people","CT scans and radiation exposure in children and young people"),
+		("Electrocardiogram (ECG)","Electrocardiogram (ECG)"),
+		("Electroencephalogram (EEG)","Electroencephalogram (EEG)"),
+		("Gastroscopy","Gastroscopy"),
+		("Eye tests","Eye tests"),
+		("Hearing test","Hearing test"),
+		("MRI scan","MRI scan"),
+		("PET scan","PET scan"),
+		("Ultrasound","Ultrasound"),
+		("X-rays","X-rays"),
+		)
+
+	id = models.AutoField(primary_key=True)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	type = models.CharField(max_length=200, choices=Types)
+	result = models.CharField(max_length=2000)
+	note = models.CharField(max_length=1000)
+	date = models.DateTimeField(auto_now_add=True, null=True)
+	file = models.FileField(max_length=100)
+	stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
 
 	def __str__(self):
 		return self.name
