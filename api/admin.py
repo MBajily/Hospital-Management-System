@@ -4,7 +4,13 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Civil_Status)
+
+class CivilStatusAdmin(admin.ModelAdmin):
+	list_display = ['nationality_id', 'full_name', 'birth', 'gender']
+	search_fields = ['nationality_id']
+
+
+admin.site.register(Civil_Status, CivilStatusAdmin)
 admin.site.register(Patient)
 admin.site.register(Kin)
 admin.site.register(Hospital)

@@ -137,6 +137,8 @@ class Medical_Examination(models.Model):
 	date = models.DateTimeField(auto_now_add=True, null=True)
 	file = models.FileField(max_length=100)
 	stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
+	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+
 
 	def __str__(self):
 		return self.patient.nationality_id.full_name
