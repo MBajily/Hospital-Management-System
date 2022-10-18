@@ -139,4 +139,4 @@ class Medical_Examination(models.Model):
 	stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
 
 	def __str__(self):
-		return self.name
+		return self.patient.nationality_id.full_name
