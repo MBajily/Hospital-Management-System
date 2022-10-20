@@ -1,5 +1,5 @@
 from django import forms 
-from django.apps.api.models import *
+from api.models import *
 
 from django.forms import inlineformset_factory
 from django.contrib.auth import login, authenticate
