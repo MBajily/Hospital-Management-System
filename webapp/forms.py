@@ -77,7 +77,7 @@ class MedicalExaminationForm(forms.ModelForm):
 		model = Medical_Examination
 		fields = ['type', 'result', 'note', 'date', 'file']
 		widgets = {
-			'name': forms.TextInput(attrs={'name':'name', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
+			'type': forms.Select(attrs={'name':'type', 'class': "form-select form-select-lg mb-3", 'required': 'True'}),
 			'result': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'True'}),
 			'note': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'True'}),
 			'date': forms.DateInput(attrs={'name':'date', 'class':"form-control", 'placeholder':"yyyy-mm-dd", 'id':"datepicker", 'required':"True", 'data-date-format':"yyyy-mm-dd"}),

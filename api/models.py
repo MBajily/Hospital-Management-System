@@ -4,7 +4,9 @@ import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
-
+import random
+import secrets
+import uuid
 
 #===============================================================
 #=====================  Civil Status  ==========================
@@ -78,12 +80,12 @@ class Kin(models.Model):
 #========================  Hospital  ===========================
 #===============================================================
 class Hospital(models.Model):
-	hospital_id = models.AutoField(primary_key=True)
+	hospital_id = models.IntegerField(primary_key=True, default=random.randint(10000000000,90000000000), editable=False)
 	name = models.CharField(max_length=100)
 	email = models.EmailField(max_length=200, unique=True)
 	logo = models.ImageField(null=True, blank=True)
-	username = models.CharField(max_length=50, unique=True)
-	password = models.CharField(max_length=100)
+	# username = models.CharField(max_length=50, unique=True)
+	password = models.UUIDField(max_length=9, default=uuid.uuid4)
 
 	def __str__(self):
 		return self.name
@@ -94,13 +96,13 @@ class Hospital(models.Model):
 #====================  Hospital's Stuff  =======================
 #===============================================================
 class Stuff(models.Model):
-	id = models.AutoField(primary_key=True)
+	id = models.IntegerField(primary_key=True, default=random.randint(10000000000,90000000000), editable=False)
 	name = models.CharField(max_length=100)
 	email = models.EmailField(max_length=200, unique=True)
 	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
 	role = models.CharField(max_length=100, null=True)
-	username = models.CharField(max_length=50, unique=True)
-	password = models.CharField(max_length=100)
+	# username = models.CharField(max_length=50, unique=True)
+	password = models.UUIDField(max_length=9, default=uuid.uuid4)
 	
 
 	def __str__(self):
