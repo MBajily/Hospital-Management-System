@@ -59,7 +59,7 @@ def add_hospital(request):
 	else:
 		form = HospitalForm()
 
-	context = {'title':'New Admin', 'form':form,
+	context = {'title':'New Hospital', 'form':form,
 			   'main_menu':main_menu, 'sub_menu':sub_menu}
 
 	return render(request, 'ministry/hospitals/add_hospital.html', context)
@@ -138,4 +138,94 @@ def hospital_active(request, hospital_id):
 			   'main_menu':main_menu, 'sub_menu':sub_menu}
 
 	return render(request, 'ministry/hospitals/hospital_active.html', context)
+#-----------------------------------------------------
+
+
+
+#=====================================================
+#==================== patient ========================
+#=====================================================
+#------------------- patients ------------------------
+@login_required(login_url='login')
+def patients(request):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	all_patients = Patient.objects.all()
+	all_patients = set(all_patients)
+
+	context = {'title':'Patients', 'all_patients':all_patients, 
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/patients/patients.html', context)
+#-----------------------------------------------------
+
+#----------------- Delete patient -----------------
+@login_required(login_url='login')
+def patient_delete(request, patient_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	selected_civil_status = Civil_Status.objects.get(nationality_id=patient_id)
+	selected_patient = Patient.objects.get(civil_status=selected_civil_status)
+	
+	if request.method == 'POST':
+		if request.user.check_password(request.POST["admin_password"]):
+			selected_patient.delete()
+			return redirect('patients')
+		else:
+			return redirect('patient_delete', patient_id)
+
+	context = {'title':'Delete Patient', 'item':selected_patient,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/patients/patient_delete.html', context)
+#-----------------------------------------------------
+
+
+#-------------- Nationality ID Check -----------------
+@login_required(login_url='login')
+def check_nationality_id(request):
+	main_menu = 'patients'
+	sub_menu = 'add_patient'
+	# groups = Group.objects.order_by('name').all()
+	if request.method == 'POST':
+		civil_status = Civil_Status.objects.filter(nationality_id=request.POST["nationality_id"]).first()
+		if (civil_status is not None):
+			if not(Patient.objects.filter(civil_status=civil_status)):
+				return redirect('add_patient', civil_status.nationality_id)
+
+	context = {'title':'Check Nationality ID',
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/patients/check_nationality_id.html', context)
+#-----------------------------------------------------
+
+
+#-------------------- Add patient -------------------------
+@login_required(login_url='login')
+def add_patient(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'add_patient'
+	# groups = Group.objects.order_by('name').all()
+	formset = CivilStatusForm(instance=Civil_Status.objects.get(nationality_id=nationality_id))
+	if request.method == 'POST':
+		civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+		if (civil_status is not None):
+			if not(Patient.objects.filter(civil_status=civil_status)):
+				if request.user.check_password(request.POST["admin_password"]):
+					added_patient = Patient(email=request.POST["email"], phone=request.POST["phone"])
+					if added_patient:
+						added_patient.civil_status = civil_status
+						added_patient.save()
+						return redirect('patients')
+				else:
+					return redirect('add_patient', nationality_id)
+	else:
+		form = PatientForm()
+
+	context = {'title':'New Patient', 'form':form, 'formset':formset,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/patients/add_patient.html', context)
 #-----------------------------------------------------

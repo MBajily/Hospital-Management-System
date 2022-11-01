@@ -6,6 +6,20 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+#=====================================================
+#===================== Kin Form ======================
+#=====================================================
+class CivilStatusForm(forms.ModelForm):
+	class Meta:
+		model = Civil_Status
+		fields = ['nationality_id', 'full_name', 'birth', 'gender']
+		widgets = {
+			'nationality_id': forms.TextInput(attrs={'name':'nationality_id', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
+			'full_name': forms.Textarea(attrs={'name':'full_name', 'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'True', 'disabled': 'True'}),
+			'birth': forms.TextInput(attrs={'name':'birth', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
+			'gender': forms.TextInput(attrs={'name':'gender', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
+		}
+
 
 #=====================================================
 #=================== Patient Form ====================
@@ -13,10 +27,9 @@ from django.contrib.auth.models import User
 class PatientForm(forms.ModelForm):
 	class Meta:
 		model = Patient
-		fields = ['nationality_id', 'phone', 'email']
+		fields = ['phone', 'email']
 		widgets = {
-			'nationality_id': forms.TextInput(attrs={'name':'first_name', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
-			'phone': forms.TextInput(attrs={'name':'last_name', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
+			'phone': forms.TextInput(attrs={'name':'phone', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
 			'email': forms.EmailInput(attrs={'name':'email', 'class':"form-control", 'id':"inputEmail", 'placeholder':"Email", 'data-error':"Bruh, that email address is invalid", 'required':'True'}),
 		}
 

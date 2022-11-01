@@ -50,7 +50,7 @@
 
 				{% if main_menu == 'hospitals' %}
 					<li class="current active">
-						<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-key"></i><span>Admins</span><span class="menu-arrow fa fa-angle-down"></span></a>
+						<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-key"></i><span>Hospitals</span><span class="menu-arrow fa fa-angle-down"></span></a>
 						<ul class="sub-menu js__content">
 							{% if sub_menu == 'all_hospitals' %}
 								<li class="current">
@@ -84,6 +84,48 @@
 
 							<li>
 								<a class="waves-effect" href="{% url 'add_hospital' %}"><i style="font-size: 20px;" class="mdi mdi-account-plus"></i> New Hospital</a>
+							</li>
+							
+						</ul>
+						<!-- /.sub-menu js__content -->
+					</li>
+				{% endif %}
+				{% if main_menu == 'patients' %}
+					<li class="current active">
+						<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-key"></i><span>Patients</span><span class="menu-arrow fa fa-angle-down"></span></a>
+						<ul class="sub-menu js__content">
+							{% if sub_menu == 'all_patients' %}
+								<li class="current">
+									<a class="waves-effect" href="{% url 'patients' %}"><i style="font-size: 20px;" class="mdi mdi-account-key"></i> Patients</a>
+								</li>
+							{% else %}
+								<li>
+									<a class="waves-effect" href="{% url 'patients' %}"><i style="font-size: 20px;" class="mdi mdi-account-key"></i> Patients</a>
+								</li>
+							{% endif %}
+
+							{% if sub_menu == 'add_patient' %}
+								<li class="current">
+									<a class="waves-effect" href="{% url 'check_nationality_id' %}"><i style="font-size: 20px;" class="mdi mdi-account-plus"></i> New Patient</a>
+								</li>
+							{% else %}
+								<li>
+									<a class="waves-effect" href="{% url 'check_nationality_id' %}"><i style="font-size: 20px;" class="mdi mdi-account-plus"></i> New Patient</a>
+								</li>
+							{% endif %}
+						</ul>
+						<!-- /.sub-menu js__content -->
+					</li>
+				{% else %}
+					<li>
+						<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon mdi mdi-key"></i><span>patients</span><span class="menu-arrow fa fa-angle-down"></span></a>
+						<ul class="sub-menu js__content">
+							<li>
+								<a class="waves-effect" href="{% url 'patients' %}"><i style="font-size: 20px;" class="mdi mdi-account-key"></i> Patients</a>
+							</li>
+
+							<li>
+								<a class="waves-effect" href="{% url 'check_nationality_id' %}"><i style="font-size: 20px;" class="mdi mdi-account-plus"></i> New Patient</a>
 							</li>
 							
 						</ul>

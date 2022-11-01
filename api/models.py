@@ -35,12 +35,12 @@ class Civil_Status(models.Model):
 #===============================================================
 class Patient(models.Model):
 	id = models.AutoField(primary_key=True)
-	nationality_id = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
+	civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
 	phone = models.CharField(max_length=20)
 	email = models.EmailField(max_length=200, null=True)
 
-	def __str__(self):
-		return self.nationality_id
+	# def __str__(self):
+	# 	return self.civil_status.nationality_id
 
 
 

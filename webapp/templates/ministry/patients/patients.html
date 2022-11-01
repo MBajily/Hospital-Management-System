@@ -15,7 +15,7 @@
 			<div class="row small-spacing">
 				<div class="col-md">
 					<div class="card card-body">
-						<label style="font-size: 30px;" class="control-label mt-5 mx-5">Hospitals</label>
+						<label style="font-size: 30px;" class="control-label mt-5 mx-5">Patients</label>
 <!-- 						<div class="m-2">
 							  <form method="GET">
 									{{all_clients_filter.form}}
@@ -27,32 +27,37 @@
 								<tr>
 									<th scope="col">ID</th>
 								    <th scope="col">Name</th>
-								    <th scope="col">email</th>
-								    <th scope="col">State</th>
+								    <th scope="col">Email</th>
+								    <th scope="col">Phone</th>
+								    <th scope="col">Gender</th>
+								    <th scope="col">Birth</th>
 								    <th scope="col">Update</th>
+								    <th scope="col">Delete</th>
 								</tr>
 							</thead>
 							<tfoot>
 								<tr>
 									<th scope="col">ID</th>
 								    <th scope="col">Name</th>
-								    <th scope="col">email</th>
-								    <th scope="col">State</th>
+								    <th scope="col">Email</th>
+								    <th scope="col">Phone</th>
+								    <th scope="col">Gender</th>
+								    <th scope="col">Birth</th>
 								    <th scope="col">Update</th>
+								    <th scope="col">Delete</th>
 								</tr>
 							</tfoot>
 							<tbody>
-								{% for hospital in all_hospitals %}
+								{% for patient in all_patients %}
 								<tr>
-									<td>{{hospital.hospital_id}}</td>
-									<td>{{hospital.name}}</a></td>
-									<td>{{hospital.email}}</td>
-									{% if hospital.active == True %}
-										<td><a class="text-success" href="{% url 'hospital_deactive' hospital.hospital_id %}"><strong>ACTIVE</strong></a></td>
-									{% elif hospital.active == False %}
-										<td><a class="text-danger" href="{% url 'hospital_active' hospital.hospital_id %}"><strong>DEACTIVE</strong></a></td>
-									{% endif %}
-									<td><a class="text-primary" href="{% url 'hospital_update' hospital.hospital_id %}"><strong>UPDATE</strong></a></td>
+									<td>{{patient.civil_status.nationality_id}}</td>
+									<td>{{patient.civil_status.full_name}}</a></td>
+									<td>{{patient.email}}</td>
+									<td>{{patient.phone}}</td>
+									<td>{{patient.civil_status.gender}}</a></td>
+									<td>{{patient.civil_status.birth}}</a></td>
+									<td><a class="text-primary" href=""><strong>UPDATE</strong></a></td>
+									<td><a class="text-primary" href="{% url 'patient_delete' patient.civil_status.nationality_id %}"><strong>DELETE</strong></a></td>
 								</tr>
 								{% endfor %}
 							</tbody>
