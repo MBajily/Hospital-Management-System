@@ -229,3 +229,33 @@ def add_patient(request, nationality_id):
 
 	return render(request, 'ministry/patients/add_patient.html', context)
 #-----------------------------------------------------
+
+
+#------------------- Update patient -------------------
+@login_required(login_url='login')
+def patient_update(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+	
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = Patient.objects.get(civil_status=civil_status)
+	formset = PatientForm(instance=selected_patient)
+	if request.method == 'POST':
+		if request.user.check_password(request.POST["admin_password"]):
+			phone = request.POST['phone']
+			email = request.POST['email']
+			
+			selected_patient.email = email
+			selected_patient.phone = phone
+			if selected_patient:
+				selected_patient.save()
+				return redirect('patients')
+		else:
+			return redirect('patient_update', selected_patient.patient_id)
+
+	context = {'title': selected_patient.civil_status.full_name, 'sub_menu':sub_menu,
+				'formset':formset, 'main_menu':main_menu,
+				'selected_patient':selected_patient, 'civil_status':civil_status}
+
+	return render(request, 'ministry/patients/patient_update.html', context)
+#-----------------------------------------------------

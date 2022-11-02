@@ -56,7 +56,7 @@
 									<td>{{patient.phone}}</td>
 									<td>{{patient.civil_status.gender}}</a></td>
 									<td>{{patient.civil_status.birth}}</a></td>
-									<td><a class="text-primary" href=""><strong>UPDATE</strong></a></td>
+									<td><a class="text-primary" href="{% url 'patient_update' patient.civil_status.nationality_id %}"><strong>UPDATE</strong></a></td>
 									<td><a class="text-primary" href="{% url 'patient_delete' patient.civil_status.nationality_id %}"><strong>DELETE</strong></a></td>
 								</tr>
 								{% endfor %}
