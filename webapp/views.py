@@ -8,6 +8,8 @@ from .filters import *
 # from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.http import HttpResponse, JsonResponse
+
 
 import csv
 #================ Export As PDF ======================
@@ -24,9 +26,37 @@ import csv
 
 
 #=====================================================
-#===================== Hospital =========================
+#=================== Dashboard =======================
 #=====================================================
-#-------------------- Hospitals -------------------------
+#------------------- Dashboard -----------------------
+@login_required(login_url='login')
+def dashboard(request):
+	main_menu = 'dashboard'
+	sub_menu = ''
+
+	hospitals_count = Hospital.objects.all().count()
+	patients_count = Patient.objects.all().count()
+	medical_examinations_count = Medical_Examination.objects.all().count()
+	recent_hospitals = Hospital.objects.filter(active=1).order_by('-date')[:5]
+	recent_patients = Patient.objects.order_by('-date')[:5]
+
+	context = {'title':'Dashboard', 'main_menu':main_menu, 
+			   'sub_menu':sub_menu, 'hospitals_count':hospitals_count,
+			   'patients_count':patients_count, 'medical_examinations_count':medical_examinations_count,
+			   'recent_hospitals':recent_hospitals, 'recent_patients':recent_patients}
+	
+	return render(request, 'ministry/dashboard/dashboard.html', context)
+#-----------------------------------------------------
+#=====================================================
+#=====================================================
+#=====================================================
+
+
+
+#=====================================================
+#==================== Hospital =======================
+#=====================================================
+#------------------- Hospitals -----------------------
 @login_required(login_url='login')
 def hospitals(request):
 	main_menu = 'hospitals'
@@ -258,4 +288,40 @@ def patient_update(request, nationality_id):
 				'selected_patient':selected_patient, 'civil_status':civil_status}
 
 	return render(request, 'ministry/patients/patient_update.html', context)
+#-----------------------------------------------------
+
+
+
+#=====================================================
+#===================== Charts ========================
+#=====================================================
+#----------------- Patients Chart --------------------
+@login_required(login_url='login')
+def patients_chart(request):
+	data = []
+
+	for d in (datetime.date.today() - datetime.timedelta(days=x) for x in reversed(range(0,30))):
+		patients_count = Patient.objects.filter(date=d.strftime("%Y-%m-%d")).all().count()
+		if patients_count:
+			data.append({'{}'.format(d.strftime("%b, %d")): patients_count})
+		else:
+			data.append({'{}'.format(d.strftime("%b, %d")): 0})
+	
+	return JsonResponse(data, safe=False)
+#-----------------------------------------------------
+
+
+#----------------- medical_examinations Chart --------------------
+@login_required(login_url='login')
+def medical_examinations_chart(request):
+	data = []
+
+	for d in (datetime.date.today() - datetime.timedelta(days=x) for x in reversed(range(0,30))):
+		medical_examinations_count = Medical_Examination.objects.filter(date=d.strftime("%Y-%m-%d")).all().count()
+		if medical_examinations_count:
+			data.append({'{}'.format(d.strftime("%b, %d")): medical_examinations_count})
+		else:
+			data.append({'{}'.format(d.strftime("%b, %d")): 0})
+	
+	return JsonResponse(data, safe=False)
 #-----------------------------------------------------

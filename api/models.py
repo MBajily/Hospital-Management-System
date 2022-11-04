@@ -25,6 +25,11 @@ class Civil_Status(models.Model):
 	birth = models.DateField()
 	gender = models.CharField(max_length=200, null=True, choices=Genders)
 
+	@property
+	def age(self):
+		if self.birth is None:
+			self.birth = datetime.datetime.now().date()
+		return int((datetime.datetime.now().date() - self.birth).days / 365.25)
 	def __str__(self):
 		return self.full_name
 
@@ -38,6 +43,7 @@ class Patient(models.Model):
 	civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
 	phone = models.CharField(max_length=20)
 	email = models.EmailField(max_length=200, null=True)
+	date = models.DateField(auto_now_add=True, blank=True)
 
 	# def __str__(self):
 	# 	return self.civil_status.nationality_id
@@ -88,6 +94,7 @@ class Hospital(models.Model):
 	# username = models.CharField(max_length=50, unique=True)
 	password = models.UUIDField(max_length=9, default=uuid.uuid4)
 	active = models.BooleanField(null=False, default=True)
+	date = models.DateField(auto_now_add=True, blank=True)
 
 	def __str__(self):
 		return self.name
