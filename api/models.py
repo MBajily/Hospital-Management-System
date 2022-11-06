@@ -143,7 +143,6 @@ class Medical_Examination(models.Model):
 	id = models.AutoField(primary_key=True)
 	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
 	type = models.CharField(max_length=200, choices=Types)
-	result = models.CharField(max_length=2000)
 	note = models.CharField(max_length=1000)
 	date = models.DateTimeField(auto_now_add=True, null=True)
 	file = models.FileField(max_length=100)

@@ -52,6 +52,31 @@ def dashboard(request):
 #=====================================================
 
 
+#=====================================================
+#================ Medical History ====================
+#=====================================================
+#---------------- Medical History --------------------
+@login_required(login_url='login')
+def medical_history(request, nationality_id):
+	main_menu = 'medical_history'
+	sub_menu = ''
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = Patient.objects.get(civil_status=civil_status).first()
+	medical_examinations = Medical_Examination.objects.filter(patient=selected_patient).all()
+
+
+	context = {'title':'medical_history', 'main_menu':main_menu, 
+			   'sub_menu':sub_menu, 'selected_patient':selected_patient,
+			   'medical_examinations':medical_examinations}
+	
+	return render(request, 'ministry/medical_history/medical_history.html', context)
+#-----------------------------------------------------
+#=====================================================
+#=====================================================
+#=====================================================
+
+
 
 #=====================================================
 #==================== Hospital =======================
