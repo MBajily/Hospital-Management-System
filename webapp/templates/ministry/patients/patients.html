@@ -51,7 +51,7 @@
 								{% for patient in all_patients %}
 								<tr>
 									<td>{{patient.civil_status.nationality_id}}</td>
-									<td>{{patient.civil_status.full_name}}</a></td>
+									<td><a href="{% url 'medical_history' patient.civil_status.nationality_id %}">{{patient.civil_status.full_name}}</a></a></td>
 									<td>{{patient.email}}</td>
 									<td>{{patient.phone}}</td>
 									<td>{{patient.civil_status.gender}}</a></td>

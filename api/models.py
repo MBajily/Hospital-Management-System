@@ -143,12 +143,12 @@ class Medical_Examination(models.Model):
 	id = models.AutoField(primary_key=True)
 	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
 	type = models.CharField(max_length=200, choices=Types)
-	note = models.CharField(max_length=1000)
+	note = models.CharField(max_length=1000, null=True, blank=True)
 	date = models.DateTimeField(auto_now_add=True, null=True)
 	file = models.FileField(max_length=100)
-	stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
+	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
 	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
 
 
 	def __str__(self):
-		return self.patient.nationality_id.full_name
+		return self.patient.civil_status.full_name

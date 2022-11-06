@@ -58,11 +58,11 @@ def dashboard(request):
 #---------------- Medical History --------------------
 @login_required(login_url='login')
 def medical_history(request, nationality_id):
-	main_menu = 'medical_history'
-	sub_menu = ''
+	main_menu = 'patinets'
+	sub_menu = 'patients'
 
 	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
-	selected_patient = Patient.objects.get(civil_status=civil_status).first()
+	selected_patient = Patient.objects.filter(civil_status=civil_status).first()
 	medical_examinations = Medical_Examination.objects.filter(patient=selected_patient).all()
 
 

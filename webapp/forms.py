@@ -92,7 +92,7 @@ class MedicalExaminationForm(forms.ModelForm):
 		widgets = {
 			'type': forms.Select(attrs={'name':'type', 'class': "form-select form-select-lg mb-3", 'required': 'True'}),
 			# 'result': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'True'}),
-			'note': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'True'}),
+			'note': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': 'Cina Saffary', 'required': 'False'}),
 			# 'date': forms.DateInput(attrs={'name':'date', 'class':"form-control", 'placeholder':"yyyy-mm-dd", 'id':"datepicker", 'required':"True", 'data-date-format':"yyyy-mm-dd"}),
 			'file': forms.FileInput(attrs={'name':'file', 'id':"input-file-to-destroy", 'class':"dropify", 'data-allowed-formats':"portrait square", 'data-max-file-size':"2M", 'data-max-height':"2000", 'required':'True'})
 		}		
