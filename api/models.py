@@ -144,7 +144,7 @@ class Medical_Examination(models.Model):
 	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
 	type = models.CharField(max_length=200, choices=Types)
 	note = models.CharField(max_length=1000, null=True, blank=True)
-	date = models.DateTimeField(auto_now_add=True, null=True)
+	date = models.DateField(auto_now_add=True, null=True)
 	file = models.FileField(max_length=100)
 	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
 	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)

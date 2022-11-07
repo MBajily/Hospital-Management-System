@@ -59,16 +59,19 @@ def dashboard(request):
 @login_required(login_url='login')
 def medical_history(request, nationality_id):
 	main_menu = 'patinets'
-	sub_menu = 'patients'
+	sub_menu = 'all_patients'
 
 	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
 	selected_patient = Patient.objects.filter(civil_status=civil_status).first()
-	medical_examinations = Medical_Examination.objects.filter(patient=selected_patient).all()
+	medical_examinations = Medical_Examination.objects.filter(patient=selected_patient).order_by('-date')
+	medical_examinations_filter = MedicalExaminationFilter(request.GET, queryset=medical_examinations)
+	medical_examinations = medical_examinations_filter.qs.order_by('-date')
 
 
-	context = {'title':'medical_history', 'main_menu':main_menu, 
+	context = {'title':'Medical History', 'main_menu':main_menu, 
 			   'sub_menu':sub_menu, 'selected_patient':selected_patient,
-			   'medical_examinations':medical_examinations}
+			   'medical_examinations':medical_examinations, 
+			   'medical_examinations_filter':medical_examinations_filter}
 	
 	return render(request, 'ministry/medical_history/medical_history.html', context)
 #-----------------------------------------------------
