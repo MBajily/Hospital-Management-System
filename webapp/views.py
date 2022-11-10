@@ -66,12 +66,14 @@ def medical_history(request, nationality_id):
 	medical_examinations = Medical_Examination.objects.filter(patient=selected_patient).order_by('-date')
 	medical_examinations_filter = MedicalExaminationFilter(request.GET, queryset=medical_examinations)
 	medical_examinations = medical_examinations_filter.qs.order_by('-date')
+	recent_health_state = Basic_Health_State.objects.filter(patient=selected_patient).order_by('-date').first()
 
 
 	context = {'title':'Medical History', 'main_menu':main_menu, 
 			   'sub_menu':sub_menu, 'selected_patient':selected_patient,
 			   'medical_examinations':medical_examinations, 
-			   'medical_examinations_filter':medical_examinations_filter}
+			   'medical_examinations_filter':medical_examinations_filter,
+			   'recent_health_state':recent_health_state}
 	
 	return render(request, 'ministry/medical_history/medical_history.html', context)
 #-----------------------------------------------------
@@ -352,4 +354,40 @@ def medical_examinations_chart(request):
 			data.append({'{}'.format(d.strftime("%b, %d")): 0})
 	
 	return JsonResponse(data, safe=False)
+#-----------------------------------------------------
+
+
+
+#=====================================================
+#============== Basic Health State ===================
+#=====================================================
+
+#--------------- Add Health State --------------------
+@login_required(login_url='login')
+def update_health_state(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = Patient.objects.get(civil_status=civil_status)
+
+	if request.method == 'POST':
+		heart_rate = request.POST['heart_rate']
+		oxygen_saturation = request.POST['oxygen_saturation']
+		body_temperature = request.POST['body_temperature']
+		glucose_level = request.POST['glucose_level']
+		health_state = Basic_Health_State(patient=selected_patient, heart_rate=heart_rate,
+										  oxygen_saturation=oxygen_saturation, body_temperature=body_temperature,
+										  glucose_level=glucose_level)
+		if health_state:
+			health_state.save()
+			return redirect('medical_history', nationality_id)
+	else:
+		health_state = Basic_Health_State.objects.filter(patient=selected_patient).order_by('-date').first()
+		form = BasicHealthStateForm(instance=health_state)
+
+	context = {'title':'Add Basic Health State', 'form':form,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/medical_history/basic_health_state.html', context)
 #-----------------------------------------------------
