@@ -341,7 +341,7 @@ def patients_chart(request):
 #-----------------------------------------------------
 
 
-#----------------- medical_examinations Chart --------------------
+#----------- Medical Examinations Chart --------------
 @login_required(login_url='login')
 def medical_examinations_chart(request):
 	data = []
@@ -386,8 +386,43 @@ def update_health_state(request, nationality_id):
 		health_state = Basic_Health_State.objects.filter(patient=selected_patient).order_by('-date').first()
 		form = BasicHealthStateForm(instance=health_state)
 
-	context = {'title':'Add Basic Health State', 'form':form,
+	context = {'title':'Update Basic Health State', 'form':form,
 			   'main_menu':main_menu, 'sub_menu':sub_menu}
 
 	return render(request, 'ministry/medical_history/basic_health_state.html', context)
+#-----------------------------------------------------
+
+
+#=====================================================
+#=================== Prescription ====================
+#=====================================================
+
+#----------------- Add Prescription ------------------
+@login_required(login_url='login')
+def add_prescription(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = Patient.objects.get(civil_status=civil_status)
+
+	if request.method == 'POST':
+		start_date = request.POST['start_date']
+		end_date = request.POST['end_date']
+		type = request.POST['type']
+		name = request.POST['name']
+		note = request.POST['note']
+		prescription = Prescription(patient=selected_patient, start_date=start_date,
+									end_date=end_date, type=type,
+									name=name, note=note)
+		if prescription:
+			prescription.save()
+			return redirect('medical_history', nationality_id)
+	else:
+		form = PrescriptionForm()
+
+	context = {'title':'Add Prescription', 'form':form,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/medical_history/add_prescription.html', context)
 #-----------------------------------------------------

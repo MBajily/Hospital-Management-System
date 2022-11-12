@@ -4,6 +4,7 @@ from Seha.settings import MEDIA_ROOT, MEDIA_URL
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.utils import timezone
 import random
 import secrets
 import uuid
@@ -176,6 +177,38 @@ class Basic_Health_State(models.Model):
 	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
 	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
 
+
+	def __str__(self):
+		return self.patient.civil_status.full_name
+
+
+#===============================================================
+#=================  Basic Health State  ======================
+#===============================================================
+class Prescription(models.Model):
+
+	Types = (
+		("Heart Disease","Heart Disease"),
+		("Skin Care","Skin Care"),
+		("Diabetes Disease","Diabetes Disease"),
+		)
+
+	id = models.AutoField(primary_key=True)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	name = models.TextField(null=False)
+	type = models.CharField(max_length=200, choices=Types)
+	start_date = models.DateField()
+	end_date = models.DateField()
+	date = models.DateTimeField(auto_now_add=True)
+	note = models.CharField(max_length=1000, null=True, blank=True)
+	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
+	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+
+	@property
+	def duration(self):
+		if self.end_date is None:
+			return None
+		return int((self.end_date - self.start_date).days)
 
 	def __str__(self):
 		return self.patient.civil_status.full_name
