@@ -67,13 +67,14 @@ def medical_history(request, nationality_id):
 	medical_examinations_filter = MedicalExaminationFilter(request.GET, queryset=medical_examinations)
 	medical_examinations = medical_examinations_filter.qs.order_by('-date')
 	recent_health_state = Basic_Health_State.objects.filter(patient=selected_patient).order_by('-date').first()
+	all_prescriptions = Prescription.objects.filter(patient=selected_patient).order_by('-date')
 
 
 	context = {'title':'Medical History', 'main_menu':main_menu, 
 			   'sub_menu':sub_menu, 'selected_patient':selected_patient,
 			   'medical_examinations':medical_examinations, 
 			   'medical_examinations_filter':medical_examinations_filter,
-			   'recent_health_state':recent_health_state}
+			   'recent_health_state':recent_health_state, 'all_prescriptions':all_prescriptions}
 	
 	return render(request, 'ministry/medical_history/medical_history.html', context)
 #-----------------------------------------------------

@@ -127,6 +127,8 @@
 						</div>
 					</div>
 
+					
+
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-content">
@@ -175,11 +177,11 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-content">
-								<h4 class="box-title">Basic Health State</h4>
+								<h4 class="box-title">Prescriptions</h4>
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
-										<li><a href="{% url 'update_health_state' selected_patient.civil_status.nationality_id %}">Update</a></li>
+										<li><a href="{% url 'add_prescription' selected_patient.civil_status.nationality_id %}">Add</a></li>
 										<li class="split"></li>
 										<li><a href="#">History</a></li>
 									</ul>
@@ -187,13 +189,16 @@
 								</div>
 								<br>
 								{% for prescription in all_prescriptions %}
-									<div class="col-xs-12 col-sm-6 col-lg-3">
-										<div class="box-content text-center p-2">
-											<h5>{{ prescription.type }}</h5>
-											<p>{{ prescription.duration }}</p>
-											<p><strong>{{ prescription.start_date }} - {% if prescription.end_date %} {{ prescription.end_date }} {% else %} present {% endif %}</strong></p>
+								<div class="col-xs-12 col-sm-6 col-lg-4">
+									
+										<div class="box-content text-center p-2" style="background: #EEE;">
+											<h4>{{ prescription.type }}</h4>
+											<p>{{ prescription.name }}</p>
+											<p>duration: {{ prescription.duration }} days</p>
+											<p>{{ prescription.start_date }} - {{ prescription.end_date }}</p>
 										</div>
-									</div>
+									
+								</div>
 								{% endfor %}
 							</div>
 						</div>
