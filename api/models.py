@@ -2,8 +2,7 @@ from django.db import models
 import datetime
 from Seha.settings import MEDIA_ROOT, MEDIA_URL
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Group, Permission, AbstractUser
 from django.utils import timezone
 import random
 import secrets
@@ -33,6 +32,31 @@ class Civil_Status(models.Model):
 		return int((datetime.datetime.now().date() - self.birth).days / 365.25)
 	def __str__(self):
 		return self.full_name
+
+
+class User(AbstractUser):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        HOSPITAL = "HOSPITAL", "Hospital"
+        PATIENT = "PATIENT", "Patient"
+
+    base_role = Role.PATIENT
+
+    username = None 
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
+    role = models.CharField(max_length=50, choices=Role.choices)
+    groups = models.ForeignKey(Group, null=True, related_name='user_group', on_delete=models.SET_NULL)
+    user_permissions = models.ForeignKey(Permission, null=True, related_name='user_permissions', on_delete=models.SET_NULL)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.role = self.base_role
+            return super().save(*args, **kwargs)
 
 
 

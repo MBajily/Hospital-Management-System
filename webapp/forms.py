@@ -4,7 +4,17 @@ from api.models import *
 from django.forms import inlineformset_factory
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+
+
+# =====================================================
+# =============== Registertion Form ===================
+# =====================================================
+class RegisterForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ['email', 'password1', 'password2']
+
 
 #=====================================================
 #===================== Kin Form ======================
