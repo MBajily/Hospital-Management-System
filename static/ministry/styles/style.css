@@ -1421,17 +1421,7 @@ Version 1.0
     z-index: -2;
   }
   .menu-active .header .logo:after {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 7px;
-    width: 35px;
-    height: 35px;
-    background: #434343;
-    z-index: -1;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
+    display: none;
   }
   .menu-active .header .logo .ico {
     margin-right: 0;

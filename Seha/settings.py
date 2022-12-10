@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'crispy_forms',
     'api',
-    'webapp',
+    'ministry',
     'home',
+    'hospital',
+    'patient',
 ]
 
 MIDDLEWARE = [
@@ -134,7 +136,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 
 # Default primary key field type
@@ -145,3 +147,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 AUTH_USER_MODEL = 'api.User'
+
+
+LOGIN_REDIRECT_URL = "/login/redirect/"
+LOGOUT_REDIRECT_URL = "/login/"
+REGISTER_REDIRECT_URL = "/login/"

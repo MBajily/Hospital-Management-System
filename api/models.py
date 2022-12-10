@@ -2,7 +2,9 @@ from django.db import models
 import datetime
 from Seha.settings import MEDIA_ROOT, MEDIA_URL
 from django import forms
-from django.contrib.auth.models import User, Group, Permission, AbstractUser
+from django.contrib.auth.models import User, Group, Permission, AbstractUser, BaseUserManager
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.utils import timezone
 import random
 import secrets
@@ -43,15 +45,23 @@ class User(AbstractUser):
     base_role = Role.PATIENT
 
     username = None 
+    last_login = None 
+    first_name = None 
+    last_name = None 
+    is_staff = None 
+    is_superuser = None 
+    groups_id = None 
+    user_permissions_id = None 
     email = models.EmailField(unique=True)
+    is_deleted = models.BooleanField(null=False, default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
+    # civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
     role = models.CharField(max_length=50, choices=Role.choices)
-    groups = models.ForeignKey(Group, null=True, related_name='user_group', on_delete=models.SET_NULL)
-    user_permissions = models.ForeignKey(Permission, null=True, related_name='user_permissions', on_delete=models.SET_NULL)
+    # groups = models.ForeignKey(Group, null=True, related_name='user_group', on_delete=models.SET_NULL)
+    # user_permissions = models.ForeignKey(Permission, null=True, related_name='user_permissions', on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -60,19 +70,91 @@ class User(AbstractUser):
 
 
 
-#===============================================================
-#========================  Patients  ===========================
-#===============================================================
-class Patient(models.Model):
-	id = models.AutoField(primary_key=True)
-	civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
-	phone = models.CharField(max_length=20)
-	email = models.EmailField(max_length=200, null=True)
-	date = models.DateField(auto_now_add=True, blank=True)
+# ===============================================================
+# ========================  Patients  ===========================
+# ===============================================================
+class PatientManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=User.Role.PATIENT)
 
-	# def __str__(self):
-	# 	return self.civil_status.nationality_id
 
+class Patient(User):
+    # id = models.AutoField(primary_key=True)
+    # civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
+    # phone = models.CharField(max_length=20)
+    # email = models.EmailField(max_length=200, null=True)
+    # date = models.DateField(auto_now_add=True, blank=True)
+    # password = models.CharField(max_length=30, default=uuid.uuid4)
+
+    base_role = User.Role.PATIENT
+
+    patient = PatientManager()
+
+    class Meta:
+        proxy = True
+
+    # def __str__(self):
+    #   return self.civil_status.nationality_id
+
+@receiver(post_save, sender=Patient)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == 'PATIENT':
+        PatientProfile.objects.create(user=instance)
+
+class PatientProfile(models.Model):
+    user = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
+    phone = models.CharField(max_length=20)
+    date_joined = models.DateField(auto_now_add=True, blank=True)
+    is_deleted = models.BooleanField(null=False, default=False)
+    photo = models.ImageField(null=True, blank=True, default='avatar.jpg')
+
+
+
+
+# ===============================================================
+# ========================  Hospital  ===========================
+# ===============================================================
+class HospitalManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=User.Role.HOSPITAL)
+
+
+class Hospital(User):
+    # hospital_id = models.IntegerField(primary_key=True, editable=False)
+    # name = models.CharField(max_length=100)
+    # email = models.EmailField(max_length=200, unique=True)
+    # logo = models.ImageField(null=True, blank=True)
+    # username = models.CharField(max_length=50, unique=True)
+    # password = models.UUIDField(max_length=9, default=uuid.uuid4)
+    # active = models.BooleanField(null=False, default=True)
+    # date = models.DateField(auto_now_add=True, blank=True)
+
+    base_role = User.Role.HOSPITAL
+
+    hospital = HospitalManager()
+
+    class Meta:
+        proxy = True
+
+    # def __str__(self):
+    #     return self.name
+
+@receiver(post_save, sender=Hospital)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == 'HOSPITAL':
+        HospitalProfile.objects.create(user=instance)
+
+class HospitalProfile(models.Model):
+    hospital_id = models.IntegerField(primary_key=True, editable=False)
+    user = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    logo = models.ImageField(null=True, blank=True)
+    is_active = models.BooleanField(null=False, default=True)
+    is_deleted = models.BooleanField(null=False, default=False)
+    date_joined = models.DateField(auto_now_add=True, blank=True)
 
 
 #===============================================================
@@ -100,29 +182,11 @@ class Kin(models.Model):
 	address = models.CharField(max_length=1000, null=True)
 	phone = models.CharField(max_length=20)
 	email = models.EmailField(max_length=200, unique=True, null=True)
-	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL, related_name='kin_patient')
 	relationship = models.CharField(max_length=200, choices=Relationships)
 
 	def __str__(self):
 		return "{} for {}".format(self.full_name)
-
-
-
-#===============================================================
-#========================  Hospital  ===========================
-#===============================================================
-class Hospital(models.Model):
-	hospital_id = models.IntegerField(primary_key=True, editable=False)
-	name = models.CharField(max_length=100)
-	email = models.EmailField(max_length=200, unique=True)
-	logo = models.ImageField(null=True, blank=True)
-	# username = models.CharField(max_length=50, unique=True)
-	password = models.UUIDField(max_length=9, default=uuid.uuid4)
-	active = models.BooleanField(null=False, default=True)
-	date = models.DateField(auto_now_add=True, blank=True)
-
-	def __str__(self):
-		return self.name
 
 
 
@@ -133,7 +197,7 @@ class Stuff(models.Model):
 	id = models.IntegerField(primary_key=True, default=random.randint(10000000000,90000000000), editable=False)
 	name = models.CharField(max_length=100)
 	email = models.EmailField(max_length=200, unique=True)
-	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='stuff_hospital')
 	role = models.CharField(max_length=100, null=True)
 	# username = models.CharField(max_length=50, unique=True)
 	password = models.UUIDField(max_length=9, default=uuid.uuid4)
@@ -166,13 +230,13 @@ class Medical_Examination(models.Model):
 		)
 
 	id = models.AutoField(primary_key=True)
-	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL, related_name='medical_examination_patient')
 	type = models.CharField(max_length=200, choices=Types)
 	report = models.CharField(max_length=1000, null=True, blank=True)
 	date = models.DateField(auto_now_add=True, null=True)
 	result = models.FileField()
 	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='medical_examination_hospital')
 
 
 	def __str__(self):
@@ -192,14 +256,14 @@ class Basic_Health_State(models.Model):
 		)
 
 	id = models.AutoField(primary_key=True)
-	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL, related_name='basic_health_state_patient')
 	heart_rate = models.IntegerField(null=False, default=0)
 	oxygen_saturation = models.IntegerField(null=False, default=0)
 	body_temperature = models.IntegerField(null=False, default=0)
 	glucose_level = models.IntegerField(null=False, default=0)
 	date = models.DateTimeField(auto_now_add=True)
 	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='basic_health_state_hospital')
 
 
 	def __str__(self):
@@ -218,7 +282,7 @@ class Prescription(models.Model):
 		)
 
 	id = models.AutoField(primary_key=True)
-	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL, related_name='patient')
 	name = models.TextField(null=False)
 	type = models.CharField(max_length=200, choices=Types)
 	start_date = models.DateField()
@@ -226,7 +290,7 @@ class Prescription(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	note = models.CharField(max_length=1000, null=True, blank=True)
 	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL)
+	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='prescription_hospital')
 
 	@property
 	def duration(self):

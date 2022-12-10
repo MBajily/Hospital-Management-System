@@ -12,7 +12,9 @@ class CivilStatusAdmin(admin.ModelAdmin):
 
 admin.site.register(Civil_Status, CivilStatusAdmin)
 admin.site.register(Patient)
+admin.site.register(PatientProfile)
 admin.site.register(Kin)
 admin.site.register(Hospital)
+admin.site.register(HospitalProfile)
 admin.site.register(Stuff)
 admin.site.register(Medical_Examination)

@@ -2,7 +2,7 @@ import os
 import secrets
 from django.shortcuts import render, redirect
 from api.models import *
-from webapp.forms import *
+from ministry.forms import *
 import datetime
 from django.contrib.auth import get_user_model
 
@@ -24,93 +24,6 @@ from django.contrib import messages
 
 # Import pafination
 from django.core.paginator import Paginator
-
-
-# # =====================================================
-# # ===================== Login =========================
-# # =====================================================
-# # ----------------- Patient Login ---------------------
-# def patient_login(request):
-#     home_menu = "login"
-#     user_logged_in = request.user
-
-#     patient_count = Patient.objects.all().count()
-#     hospital_count = Hospital.objects.all().count()
-
-#     if request.method == "POST":
-#         civil_status = Civil_Status.objects.get(request.form["nationality_id"])
-#         patient = Patient.objects.get(civil_status=civil_status)
-#         if patinet.password and bcrypt.check_password_hash(
-#             patinet.password, request.form["Password"]
-#         ):
-#             login_patient(patient)
-#             message = "logged in successfully as {}".format(
-#                 patinet.civil_status.full_name
-#             )
-#             message_category = "success"
-#             return redirect("home")
-#         message = "Incorrect username or password"
-#         message_category = "danger"
-#         return render_template(
-#             "login.html", message=message, message_category=message_category
-#         )
-
-#     context = {
-#         "title": "Patient Login",
-#         "user_logged_in": user_logged_in,
-#         "patient_count": patient_count,
-#         "home_menu": home_menu,
-#         "hospital_count": hospital_count,
-#     }
-
-#     return render(request, "home/patient_login.html", context)
-
-
-# # -----------------------------------------------------
-# def hospital_login(request):
-#     home_menu = "login"
-#     user_logged_in = request.user
-
-#     patient_count = Patient.objects.all().count()
-#     hospital_count = Hospital.objects.all().count()
-
-#     if request.method == "POST":
-#         civil_status = Civil_Status.objects.get(request.form["nationality_id"])
-#         patient = Patient.objects.get(civil_status=civil_status)
-#         if patinet.password and bcrypt.check_password_hash(
-#             patinet.password, request.form["Password"]
-#         ):
-#             login_patient(patient)
-#             message = "logged in successfully as {}".format(
-#                 patinet.civil_status.full_name
-#             )
-#             message_category = "success"
-#             return redirect("home")
-#         message = "Incorrect username or password"
-#         message_category = "danger"
-#         return render_template(
-#             "login.html", message=message, message_category=message_category
-#         )
-
-#     context = {
-#         "title": "Patient Login",
-#         "user_logged_in": user_logged_in,
-#         "patient_count": patient_count,
-#         "home_menu": home_menu,
-#         "hospital_count": hospital_count,
-#     }
-
-#     return render(request, "home/hospital_login.html", context)
-
-
-# def ministry_login(request):
-
-#     return redirect("home")
-
-
-# =====================================================
-# =====================================================
-# =====================================================
 
 
 def register(request):
@@ -140,12 +53,15 @@ def error_404(request, exception):
 
 # @login_required(login_url='login')
 def login_redirect_page(request):
-    user = User.objects.get(email='mbajily@gmail.com')
+    user = request.user
     if user.role == 'PATIENT':
-        return redirect("dashboard")
+        return redirect("patient_history")
 
     elif user.role == 'HOSPITAL':
-        return redirect("registration")
+        return redirect("register")
+
+    elif user.role == 'ADMIN':
+        return redirect('dashboard')
 
 
 # =====================================================
