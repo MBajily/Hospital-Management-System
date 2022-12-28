@@ -101,6 +101,13 @@ class Patient(User):
 def create_user_profile(sender, instance, created, **kwargs):
     if created and instance.role == 'PATIENT':
         PatientProfile.objects.create(user=instance)
+        Basic_Health_State.objects.create(patient=instance)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == 'PATIENT':
+        PatientProfile.objects.create(user=instance)
+        Basic_Health_State.objects.create(patient=instance)
 
 class PatientProfile(models.Model):
     user = models.ForeignKey(Patient, on_delete=models.CASCADE)

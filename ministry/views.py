@@ -271,7 +271,7 @@ def check_nationality_id(request):
 	if request.method == 'POST':
 		civil_status = Civil_Status.objects.filter(nationality_id=request.POST["nationality_id"]).first()
 		if (civil_status is not None):
-			if not(Patient.objects.filter(civil_status=civil_status)):
+			if not(PatientProfile.objects.filter(civil_status=civil_status)):
 				return redirect('add_patient', civil_status.nationality_id)
 
 	context = {'title':'Check Nationality ID',
@@ -287,28 +287,33 @@ def check_nationality_id(request):
 def add_patient(request, nationality_id):
 	main_menu = 'patients'
 	sub_menu = 'add_patient'
-	# groups = Group.objects.order_by('name').all()
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
 	formset = CivilStatusForm(instance=Civil_Status.objects.get(nationality_id=nationality_id))
-	if request.method == 'POST':
-		civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
-		if (civil_status is not None):
-			if not(PatientProfile.objects.filter(civil_status=civil_status)):
-				if request.user.check_password(request.POST["admin_password"]):
-					added_patient = Patient(email=request.POST["email"])
-					if added_patient:
-						added_patient.save()
-						patient_profile = PatientProfile(user=added_patient ,phone=request.POST["phone"], civil_status=civil_status)
-						patient_profile.save()
-						return redirect('patients')
-				else:
-					return redirect('add_patient', nationality_id)
-	else:
-		form = PatientForm()
+	if (civil_status is not None):
+		if not(PatientProfile.objects.filter(civil_status=civil_status)):
+			if request.method == 'POST':
+				if (civil_status is not None):
+					if not(PatientProfile.objects.filter(civil_status=civil_status)):
+						if request.user.check_password(request.POST["admin_password"]):
+							added_patient = Patient(email=request.POST["email"])
+							if added_patient:
+								added_patient.save()
+								patient_profile = PatientProfile.objects.get(user=added_patient)
+								patient_profile.photo = request.POST["photo"]
+								patient_profile.phone = request.POST["phone"]
+								patient_profile.civil_status = civil_status
+								patient_profile.save()
+								return redirect('patients')
+						else:
+							return redirect('add_patient', nationality_id)
+			else:
+				form = PatientProfileForm()
 
-	context = {'title':'New Patient', 'form':form, 'formset':formset,
-			   'main_menu':main_menu, 'sub_menu':sub_menu}
+			context = {'title':'New Patient', 'form':form, 'formset':formset,
+					   'main_menu':main_menu, 'sub_menu':sub_menu}
 
-	return render(request, 'ministry/patients/add_patient.html', context)
+			return render(request, 'ministry/patients/add_patient.html', context)
+	return redirect('check_nationality_id')
 #-----------------------------------------------------
 
 
@@ -415,6 +420,24 @@ def update_health_state(request, nationality_id):
 	return render(request, 'ministry/medical_history/basic_health_state.html', context)
 #-----------------------------------------------------
 
+
+#------------ Add Health State History ---------------
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['ADMIN'])
+def health_state_history(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = PatientProfile.objects.get(civil_status=civil_status)
+
+	health_state = Basic_Health_State.objects.filter(patient=selected_patient.user).order_by('-date')
+
+	context = {'title':'Health State History', 'health_state':health_state,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/medical_history/basic_health_state_history.html', context)
+#-----------------------------------------------------
 
 #=====================================================
 #=================== Prescription ====================

@@ -40,114 +40,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- /.col-lg-3 col-md-6 col-xs-12 -->
-				<!-- <div class="col-lg-3 col-md-6 col-xs-12">
-					<div class="box-content bg-warning text-white">
-						<div class="statistics-box with-icon">
-							<i class="ico small fa fa-briefcase"></i>
-							<p class="text text-white">AVAILABLE JOBS</p>
-							<h2 class="counter"></h2>
-						</div>
-					</div>
-				</div> -->
-				<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 			</div>
-			<!-- .row -->
-			<!-- <div class="row small-spacing">
-
-				<div class="col-sm-6 col-lg-3 col-xs-12">
-					<div class="box-content">
-						<h4 class="box-title text-success">Available Jobs</h4>
-						<div class="dropdown js__drop_down">
-							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
-							</ul>
-						</div>
-						<div class="content widget-stat">
-							<div id="AvailableJobs" class="left-content margin-top-10"></div>
-							<div class="right-content">
-								<h2 class="counter text-success">{{jobs_count}} <i class="fa fa-briefcase"></i></h2>
-								<p class="text text-success">Jobs</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-sm-6 col-lg-3 col-xs-12">
-					<div class="box-content">
-						<h4 class="box-title text-info">Jobs Applies</h4>
-						<div class="dropdown js__drop_down">
-							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
-							</ul>
-						</div>
-						<div class="content widget-stat">
-							<div id="Patients" class="left-content margin-top-15"></div>
-							<div class="right-content">
-								<h2 class="counter text-info">{{clients_applied_count}} <i class="fa fa-group"></i></h2>
-								<p class="text text-info">Clients Applied</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-3 col-xs-12">
-					<div class="box-content">
-						<h4 class="box-title text-success">Active Clients</h4>
-						<div class="dropdown js__drop_down">
-							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
-							</ul>
-						</div>
-						<div class="content widget-stat">
-							<div id="ActiveClients" class="left-content margin-top-10"></div>
-							<div class="right-content">
-								<h2 class="counter text-success">{{active_clients_count}} <i class="fa fa-check-circle"></i></h2>
-								<p class="text text-success">Clients</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				
-
-				<div class="col-sm-6 col-lg-3 col-xs-12">
-					<div class="box-content">
-						<h4 class="box-title text-orange">Inactive Clients</h4>
-						<div class="dropdown js__drop_down">
-							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
-							</ul>
-						</div>
-						<div class="content widget-stat">
-							<div id="InactiveClients" class="left-content"></div>
-							<div class="right-content">
-								<h2 class="counter text-orange">{{inactive_clients_count}} <i class="fa fa-user-times"></i></h2>
-								<p class="text text-orange">Inactive Clients</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> -->
 			<!-- .row -->
 			<div class="row small-spacing">
 				<div class="col-lg-6 col-xs-12">
@@ -157,11 +50,7 @@
 						<div class="dropdown js__drop_down">
 							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
+								<li><a href="{% url 'patients' %}">Patients</a></li>
 							</ul>
 							<!-- /.sub-menu -->
 						</div>
@@ -178,18 +67,6 @@
 					<div class="box-content">
 						<h4 class="box-title">Medical Records</h4>
 						<!-- /.box-title -->
-						<div class="dropdown js__drop_down">
-							<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-							<ul class="sub-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else there</a></li>
-								<li class="split"></li>
-								<li><a href="#">Separated link</a></li>
-							</ul>
-							<!-- /.sub-menu -->
-						</div>
-						<!-- /.dropdown js__dropdown -->
 						<canvas id="NewMedicalExaminations" class="chart--container">
 					    </canvas>
 						<!-- /#donut-chartjs-chart.chartjs-chart -->
@@ -219,7 +96,7 @@
 								<tr>
 									<td>{{patient.civil_status.full_name}}</td>
 									<td>{{patient.civil_status.age}}</td>
-									<td><i class="mdi mdi-clock"></i> {{patient.date|timesince}} ago</td>
+									<td><i class="mdi mdi-clock"></i> {{patient.date_joined|timesince}} ago</td>
 								</tr>
 								{% endfor %}
 								<tr>
@@ -252,7 +129,7 @@
 								{% for hospital in recent_hospitals %}
 								<tr>
 									<td>{{hospital.name}}</td>
-									<td><i class="mdi mdi-clock"></i> {{hospital.date|timesince}} ago</td>
+									<td><i class="mdi mdi-clock"></i> {{hospital.date_joined|timesince}} ago</td>
 								</tr>
 								{% endfor %}
 								<tr>

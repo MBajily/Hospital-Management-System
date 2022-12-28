@@ -93,13 +93,11 @@
 				<div class="col-md-9 col-xs-12">
 					<div class="row">
 						<div class="col-xs-12">
-							<div class="box-content">
-								<h4 class="box-title">Basic Health State</h4>
+							<div class="box-content bordered primary">
+								<h4 class="box-title text-dark">Basic Health State</h4>
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
-										<li><a href="{% url 'update_health_state' selected_patient.civil_status.nationality_id %}">Update</a></li>
-										<li class="split"></li>
 										<li><a href="#">History</a></li>
 									</ul>
 									<!-- /.sub-menu -->
@@ -191,8 +189,6 @@
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
-										<li><a href="{% url 'add_prescription' selected_patient.civil_status.nationality_id %}">Add</a></li>
-										<li class="split"></li>
 										<li><a href="#">History</a></li>
 									</ul>
 									<!-- /.sub-menu -->

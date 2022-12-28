@@ -15,44 +15,39 @@
                             <form class="nobottommargin" action="#" method="post">
 
                                 {% csrf_token %}
-                                <br><br>
-                                <div class="row">
+                                <div class="row my-5">
                                     <div class="form-group col-12 m-1">
                                         <label for="validationCustom08">Nationality ID:</label>
                                          {{formset.nationality_id}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row my-5">
                                     <div class="form-group col-12 m-1">
                                         <label for="validationCustom08">Full Name:</label>
                                          {{formset.full_name}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row my-5">
                                     <div class="form-group col-12 m-1">
                                         <label for="validationCustom08">Birth:</label>
                                          {{formset.birth}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row my-5">
                                     <div class="form-group col-12 m-1">
                                         <label for="validationCustom08">Gender:</label>
                                          {{formset.gender}}
                                     </div>
                                 </div>
                                 
-                                <div class="row">
+                                <div class="row my-5">
                                     <div class="form-group col-12 m-1">
                                         <label for="validationCustom08">Email:</label>
                                         <input type="email" name="email" class='form-control' id='inputName' required='True'>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-12 m-1">
-                                        <label for="validationCustom08">Phone:</label>
-                                        <input type="text" name="phone" class='form-control' id='inputName' required='True'>
-                                    </div>
-                                </div>
+
+                                {{form}}
                                 <div class="p-5">
                                     <label>Write your admin's password<span class="text-danger">*</span></label>
                                     <input type="password" name="admin_password" class='form-control' id='inputName' required='True'>

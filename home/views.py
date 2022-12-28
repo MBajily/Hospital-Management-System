@@ -26,18 +26,47 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 
 
-def register(request):
+def check_register(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
+        nationality_id = request.POST["nationality_id"]
+        civil_status = Civil_Status.objects.filter(nationality_id=nationality_id).first()
+        if (civil_status is not None):
+            if not(PatientProfile.objects.filter(civil_status=civil_status)):
+                return redirect('register', nationality_id)
+        form = RegisterForm()
     else:
         form = RegisterForm()
 
     context = {'title':'Sign up','form':form}
 
-    return render(request, "home/registration.html", context)
+    return render(request, "home/check_registration.html", context)
+
+
+def register(request, nationality_id):
+    civil_status = Civil_Status.objects.filter(nationality_id=nationality_id).first()
+    formset = CivilStatusForm(instance=Civil_Status.objects.get(nationality_id=nationality_id))
+
+    if (civil_status is not None):
+        if not(PatientProfile.objects.filter(civil_status=civil_status)):
+            if request.method == 'POST':
+                if (civil_status is not None):
+                    if not(PatientProfile.objects.filter(civil_status=civil_status)):
+                        form = RegisterForm(request.POST)
+                        if form.is_valid():
+                            form.save()
+                            added_patient = Patient.objects.get(email=request.POST["email"])
+                            patient_profile = PatientProfile.objects.get(user=added_patient)
+                            patient_profile.phone = request.POST["phone"]
+                            patient_profile.civil_status = civil_status
+                            patient_profile.save()
+                            return redirect('login')
+            else:
+                form = RegisterForm()
+
+            context = {'title':'Sign up','form':form, 'formset':formset}
+
+            return render(request, "home/registration.html", context)
+    return redirect('check_register')
 
 
 # ------------------- Home Page -----------------------

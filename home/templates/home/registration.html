@@ -20,6 +20,26 @@
                     <form method="POST">
                       <div class="row">
                         {% csrf_token %}
+                        <div class="form-group">
+                            <label for="validationCustom08">Nationality ID</label>
+                             {{formset.nationality_id}}
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom08">Full Name</label>
+                             {{formset.full_name}}
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom08">Birth</label>
+                             {{formset.birth}}
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom08">Gender</label>
+                             {{formset.gender}}
+                        </div>
+                        <div class="form-group">
+                          <label for="validationCustom08">Phone*</label>
+                          <input type="text" name="phone" class='form-control' id='inputName' required='True'>
+                        </div>
                         {{form|crispy}}
                         <div class="col-12">
                           <div class="form-group">

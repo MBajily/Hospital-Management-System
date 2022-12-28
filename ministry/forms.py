@@ -25,7 +25,7 @@ class CivilStatusForm(forms.ModelForm):
 		fields = ['nationality_id', 'full_name', 'birth', 'gender']
 		widgets = {
 			'nationality_id': forms.TextInput(attrs={'name':'nationality_id', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
-			'full_name': forms.Textarea(attrs={'name':'full_name', 'class': 'form-control', 'id': 'inputName', 'placeholder': '', 'required': 'True', 'disabled': 'True'}),
+			'full_name': forms.TextInput(attrs={'name':'full_name', 'class': 'form-control', 'id': 'inputName', 'placeholder': '', 'required': 'True', 'disabled': 'True'}),
 			'birth': forms.TextInput(attrs={'name':'birth', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
 			'gender': forms.TextInput(attrs={'name':'gender', 'class': 'form-control', 'id': 'inputName', 'required': 'True', 'disabled': 'True'}),
 		}
@@ -37,9 +37,10 @@ class CivilStatusForm(forms.ModelForm):
 class PatientProfileForm(forms.ModelForm):
 	class Meta:
 		model = PatientProfile
-		fields = ['phone']
+		fields = ['phone', 'photo']
 		widgets = {
-			'phone': forms.TextInput(attrs={'name':'phone', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
+			'phone': forms.TextInput(attrs={'name':'phone', 'class': 'form-control mb-5', 'id': 'inputName', 'required': 'True'}),
+			'photo': forms.FileInput(attrs={'name':'photo', 'id':"input-file-to-destroy", 'class':"dropify mb-5", 'data-allowed-formats':"portrait square", 'data-max-file-size':"2M", 'data-max-height':"2000", 'required':'True'})
 			# 'email': forms.EmailInput(attrs={'name':'email', 'class':"form-control", 'id':"inputEmail", 'placeholder':"Email", 'data-error':"Bruh, that email address is invalid", 'required':'True'}),
 		}
 

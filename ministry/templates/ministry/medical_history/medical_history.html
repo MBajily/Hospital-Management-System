@@ -101,7 +101,7 @@
 									<ul class="sub-menu">
 										<li><a href="{% url 'update_health_state' selected_patient.civil_status.nationality_id %}">Update</a></li>
 										<li class="split"></li>
-										<li><a href="#">History</a></li>
+										<li><a href="{% url 'health_state_history' selected_patient.civil_status.nationality_id %}">History</a></li>
 									</ul>
 									<!-- /.sub-menu -->
 								</div>
