@@ -21,6 +21,7 @@ urlpatterns =[
 	path('patients/<int:nationality_id>/health_state/update/', views.update_health_state, name='update_health_state'),
 	path('patients/<int:nationality_id>/health_state/history/', views.health_state_history, name='health_state_history'),
 	path('patients/<int:nationality_id>/prescriptions/new/', views.add_prescription, name='add_prescription'),
+	path('patients/<int:nationality_id>/diseases/add/', views.add_patient_disease, name='add_patient_disease'),
 
 
 	path('data/patients/json/', views.patients_chart, name='patients_chart'),

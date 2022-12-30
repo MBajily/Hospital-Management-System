@@ -307,3 +307,20 @@ class Prescription(models.Model):
 
 	def __str__(self):
 		return self.patient.civil_status.full_name
+
+
+
+class Disease(models.Model):
+
+	id = models.AutoField(primary_key=True)
+	name = models.TextField(null=False)
+
+	def __str__(self):
+		return self.name
+
+
+class Patient_Disease(models.Model):
+	id = models.AutoField(primary_key=True)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
+	disease = models.ForeignKey(Disease, null=True, on_delete=models.SET_NULL)
+	date = models.DateTimeField(auto_now_add=True)

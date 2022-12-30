@@ -95,7 +95,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-content bordered primary">
-								<h4 class="box-title text-dark">Basic Health State</h4>
+								<h3 class="box-title text-dark">Basic Health State</h3>
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
@@ -138,12 +138,29 @@
 						</div>
 					</div>
 
-					
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="box-content">
+								<h3 class="box-title text-dark">Patient's Diseases</h3>
+								<div class="dropdown js__drop_down">
+									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
+									<ul class="sub-menu">
+										<li><a href="{% url 'add_patient_disease' selected_patient.civil_status.nationality_id %}">Update</a></li>
+									</ul>
+									<!-- /.sub-menu -->
+								</div>
+								<br>
+								{% for disease in diseases %}
+									<div class="btn btn-info m-2" style="border-radius: 30px;">{{disease.disease.name}}</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-content">
-								<h4 class="box-title">Medical History</h4>
+								<h3 class="box-title">Medical History</h3>
 								<!-- /.box-title -->
 								<div class="m-2">
 									  <form method="GET">
@@ -188,7 +205,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-content">
-								<h4 class="box-title">Prescriptions</h4>
+								<h3 class="box-title">Prescriptions</h3>
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">

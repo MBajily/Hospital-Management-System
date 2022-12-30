@@ -71,8 +71,9 @@ def medical_history(request, nationality_id):
 	medical_examinations = medical_examinations_filter.qs.order_by('-date')
 	recent_health_state = Basic_Health_State.objects.filter(patient=selected_patient.user).order_by('-date').first()
 	all_prescriptions = Prescription.objects.filter(patient=selected_patient.user).order_by('-date')
-
-	context = {'title':'Medical History', 'main_menu':main_menu, 
+	diseases = Patient_Disease.objects.filter(patient=selected_patient.user).all()
+	print(diseases)
+	context = {'title':'Medical History', 'main_menu':main_menu, 'diseases':diseases,
 			   'sub_menu':sub_menu, 'selected_patient':selected_patient,
 			   'medical_examinations':medical_examinations, 
 			   'medical_examinations_filter':medical_examinations_filter,
@@ -472,4 +473,38 @@ def add_prescription(request, nationality_id):
 			   'main_menu':main_menu, 'sub_menu':sub_menu}
 
 	return render(request, 'ministry/medical_history/add_prescription.html', context)
+#-----------------------------------------------------\
+
+
+
+#=====================================================
+#================= Patient Disease ===================
+#=====================================================
+
+#----------------- Add Prescription ------------------
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['ADMIN'])
+def add_patient_disease(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = PatientProfile.objects.get(civil_status=civil_status)
+	old_diseases = Patient_Disease.objects.filter(patient=selected_patient.user).all()
+	old_diseases = [d.id for d in old_diseases]
+	diseases = Disease.objects.all()
+	print(old_diseases)
+	if request.method == 'POST':
+		selected_diseases = request.POST.getlist('diseases')
+		for d in selected_diseases:
+			disease = Disease.objects.get(id=d)
+			patient_disease = Patient_Disease(patient=selected_patient.user, disease=disease)
+			patient_disease.save()
+		
+		return redirect('medical_history', nationality_id)
+
+	context = {'title':'Update Diseases', 'diseases':diseases, 'old_diseases':old_diseases,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'ministry/medical_history/add_disease.html', context)
 #-----------------------------------------------------
