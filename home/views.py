@@ -9,7 +9,6 @@ from django.contrib.auth import get_user_model
 # from .forms import *
 # from .filters import *
 
-
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
@@ -87,7 +86,7 @@ def login_redirect_page(request):
         return redirect("patient_history")
 
     elif user.role == 'HOSPITAL':
-        return redirect("register")
+        return redirect("hospital_dashboard")
 
     elif user.role == 'ADMIN':
         return redirect('dashboard')

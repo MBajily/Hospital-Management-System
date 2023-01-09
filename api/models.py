@@ -26,6 +26,7 @@ class Civil_Status(models.Model):
 	full_name = models.CharField(max_length=200, null=True)
 	birth = models.DateField()
 	gender = models.CharField(max_length=200, null=True, choices=Genders)
+	photo = models.ImageField(null=True, blank=True, default='avatar.jpg')
 
 	@property
 	def age(self):
@@ -58,10 +59,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    # civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
     role = models.CharField(max_length=50, choices=Role.choices)
-    # groups = models.ForeignKey(Group, null=True, related_name='user_group', on_delete=models.SET_NULL)
-    # user_permissions = models.ForeignKey(Permission, null=True, related_name='user_permissions', on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -80,13 +78,6 @@ class PatientManager(BaseUserManager):
 
 
 class Patient(User):
-    # id = models.AutoField(primary_key=True)
-    # civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
-    # phone = models.CharField(max_length=20)
-    # email = models.EmailField(max_length=200, null=True)
-    # date = models.DateField(auto_now_add=True, blank=True)
-    # password = models.CharField(max_length=30, default=uuid.uuid4)
-
     base_role = User.Role.PATIENT
 
     patient = PatientManager()
@@ -94,8 +85,6 @@ class Patient(User):
     class Meta:
         proxy = True
 
-    # def __str__(self):
-    #   return self.civil_status.nationality_id
 
 @receiver(post_save, sender=Patient)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -110,7 +99,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         Basic_Health_State.objects.create(patient=instance)
 
 class PatientProfile(models.Model):
-    user = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    user = models.OneToOneField(Patient, on_delete=models.CASCADE)
     civil_status = models.ForeignKey(Civil_Status, null=True, on_delete=models.SET_NULL)
     phone = models.CharField(max_length=20)
     date_joined = models.DateField(auto_now_add=True, blank=True)
@@ -130,15 +119,6 @@ class HospitalManager(BaseUserManager):
 
 
 class Hospital(User):
-    # hospital_id = models.IntegerField(primary_key=True, editable=False)
-    # name = models.CharField(max_length=100)
-    # email = models.EmailField(max_length=200, unique=True)
-    # logo = models.ImageField(null=True, blank=True)
-    # username = models.CharField(max_length=50, unique=True)
-    # password = models.UUIDField(max_length=9, default=uuid.uuid4)
-    # active = models.BooleanField(null=False, default=True)
-    # date = models.DateField(auto_now_add=True, blank=True)
-
     base_role = User.Role.HOSPITAL
 
     hospital = HospitalManager()
@@ -146,8 +126,6 @@ class Hospital(User):
     class Meta:
         proxy = True
 
-    # def __str__(self):
-    #     return self.name
 
 @receiver(post_save, sender=Hospital)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -156,7 +134,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class HospitalProfile(models.Model):
     hospital_id = models.IntegerField(primary_key=True, editable=False)
-    user = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    user = models.OneToOneField(Hospital, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
     is_active = models.BooleanField(null=False, default=True)
@@ -198,33 +176,13 @@ class Kin(models.Model):
 
 
 #===============================================================
-#====================  Hospital's Stuff  =======================
-#===============================================================
-class Stuff(models.Model):
-	id = models.IntegerField(primary_key=True, default=random.randint(10000000000,90000000000), editable=False)
-	name = models.CharField(max_length=100)
-	email = models.EmailField(max_length=200, unique=True)
-	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='stuff_hospital')
-	role = models.CharField(max_length=100, null=True)
-	# username = models.CharField(max_length=50, unique=True)
-	password = models.UUIDField(max_length=9, default=uuid.uuid4)
-	
-
-	def __str__(self):
-		return self.name
-
-
-
-#===============================================================
 #=================  Medical Examinations  ======================
 #===============================================================
 class Medical_Examination(models.Model):
-
 	Types = (
 		("Biopsy","Biopsy"),
 		("Colonoscopy","Colonoscopy"),
 		("CT scan","CT scan"),
-		("CT scans and radiation exposure in children and young people","CT scans and radiation exposure in children and young people"),
 		("Electrocardiogram (ECG)","Electrocardiogram (ECG)"),
 		("Electroencephalogram (EEG)","Electroencephalogram (EEG)"),
 		("Gastroscopy","Gastroscopy"),
@@ -242,9 +200,6 @@ class Medical_Examination(models.Model):
 	report = models.CharField(max_length=1000, null=True, blank=True)
 	date = models.DateField(auto_now_add=True, null=True)
 	result = models.FileField()
-	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='medical_examination_hospital')
-
 
 	def __str__(self):
 		return self.patient.civil_status.full_name
@@ -254,7 +209,6 @@ class Medical_Examination(models.Model):
 #=================  Basic Health State  ======================
 #===============================================================
 class Basic_Health_State(models.Model):
-
 	Types = (
 		("Heart Rate","Heart Rate"),
 		("Oxygen Saturation","Oxygen Saturation"),
@@ -269,9 +223,6 @@ class Basic_Health_State(models.Model):
 	body_temperature = models.IntegerField(null=False, default=0)
 	glucose_level = models.IntegerField(null=False, default=0)
 	date = models.DateTimeField(auto_now_add=True)
-	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='basic_health_state_hospital')
-
 
 	def __str__(self):
 		return self.patient.civil_status.full_name
@@ -281,7 +232,6 @@ class Basic_Health_State(models.Model):
 #=================  Basic Health State  ======================
 #===============================================================
 class Prescription(models.Model):
-
 	Types = (
 		("Heart Disease","Heart Disease"),
 		("Skin Care","Skin Care"),
@@ -296,8 +246,6 @@ class Prescription(models.Model):
 	end_date = models.DateField()
 	date = models.DateTimeField(auto_now_add=True)
 	note = models.CharField(max_length=1000, null=True, blank=True)
-	# stuff = models.ForeignKey(Stuff, null=True, on_delete=models.SET_NULL)
-	# hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name='prescription_hospital')
 
 	@property
 	def duration(self):
@@ -311,7 +259,6 @@ class Prescription(models.Model):
 
 
 class Disease(models.Model):
-
 	id = models.AutoField(primary_key=True)
 	name = models.TextField(null=False)
 
@@ -323,4 +270,11 @@ class Patient_Disease(models.Model):
 	id = models.AutoField(primary_key=True)
 	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL)
 	disease = models.ForeignKey(Disease, null=True, on_delete=models.SET_NULL)
+	date = models.DateTimeField(auto_now_add=True)
+
+
+class Hospital_Patient(models.Model):
+	id = models.AutoField(primary_key=True)
+	patient = models.ForeignKey(Patient, null=True, on_delete=models.SET_NULL, related_name="patient_in_hospital")
+	hospital = models.ForeignKey(Hospital, null=True, on_delete=models.SET_NULL, related_name="hospital_for_patient")
 	date = models.DateTimeField(auto_now_add=True)

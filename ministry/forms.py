@@ -85,20 +85,6 @@ class HospitalProfileForm(forms.ModelForm):
 		}
 
 
-#=====================================================
-#==================== Stuff Form =====================
-#=====================================================
-class StuffForm(forms.ModelForm):
-	class Meta:
-		model = Stuff
-		fields = ['name', 'email', 'role', 'password']
-		widgets = {
-			'name': forms.TextInput(attrs={'name':'name', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
-			'email': forms.EmailInput(attrs={'name':'email', 'class':"form-control", 'id':"inputEmail", 'placeholder':"Email", 'data-error':"Bruh, that email address is invalid", 'required':'True'}),
-			'role': forms.TextInput(attrs={'name':'role', 'class': 'form-control', 'id': 'inputName', 'required': 'True'}),
-			'password': forms.TextInput(attrs={'name':'password', 'type':"password", 'class': "form-control", 'id': "validationCustom08", 'placeholder':"Primary Number", 'oninput':"check(this)", 'required':'True'}),
-		}
-
 
 #=====================================================
 #============ Medical Examination Form ===============

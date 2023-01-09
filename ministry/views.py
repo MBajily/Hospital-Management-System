@@ -5,7 +5,7 @@ from api.models import *
 import datetime
 from .forms import *
 from .filters import *
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import allowed_users
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.http import HttpResponse, JsonResponse
@@ -473,7 +473,7 @@ def add_prescription(request, nationality_id):
 			   'main_menu':main_menu, 'sub_menu':sub_menu}
 
 	return render(request, 'ministry/medical_history/add_prescription.html', context)
-#-----------------------------------------------------\
+#-----------------------------------------------------
 
 
 

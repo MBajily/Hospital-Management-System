@@ -5,7 +5,7 @@ from api.models import *
 # import datetime
 # from .forms import *
 from ministry.filters import *
-from ministry.decorators import unauthenticated_user, allowed_users
+from ministry.decorators import allowed_users
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.models import Group
 # from django.http import HttpResponse, JsonResponse
