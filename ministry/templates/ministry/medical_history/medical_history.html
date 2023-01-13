@@ -16,12 +16,13 @@
 					<div class="box-content bordered primary">
 						<div class="profile-avatar">
 							{% if selected_patient.photo %}
-								<img class="border" src="{% static 'media' %}/{{selected_patient.photo}}" alt="{{selected_patient.civil_status.full_name}}">
+								<img src="{% static 'media' %}/{{selected_patient.photo}}" alt="{{selected_patient.civil_status.full_name}}">
 							{% else %}
-								<img class="border" src="{% static 'media' %}/avatar.jpg" alt="">
+								<img src="{% static 'media' %}/avatar.jpg" alt="">
 							{% endif %}
 							
-							<span class="btn btn-block btn-friend"><i class="fa fa-check-circle"></i> Active</span>
+							<a href="{% url 'add_medical_test' selected_patient.civil_status.nationality_id %}" class="btn btn-block btn-friend"><i class="fa fa-plus"></i> Add Medical Test</a>
+							<a href="{% url 'add_patient_disease' selected_patient.civil_status.nationality_id %}" class="btn btn-block btn-danger"><i class="fa fa-plus"></i> Add Disease</a>
 							<h3><strong>{{selected_patient.civil_status.full_name}}</strong></h3>
 						</div>
 					</div>
@@ -164,17 +165,11 @@
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
-										<li><a href="{% url 'add_patient_disease' selected_patient.civil_status.nationality_id %}">New</a></li>
+										<li><a href="{% url 'add_medical_test' selected_patient.civil_status.nationality_id %}">New</a></li>
 									</ul>
 									<!-- /.sub-menu -->
 								</div>
 								<!-- /.box-title -->
-								<div class="m-2">
-									  <form method="GET">
-											{{medical_examinations_filter.form}}
-									    <button class="btn btn-primary" type="submit">Search</button>
-									  </form>
-								</div>
 								<table id="example-scroll-y" class="table table-striped table-bordered display" style="width:100%">
 									<thead>
 										<tr>
@@ -200,6 +195,13 @@
 										{% endfor %}
 									</tbody>
 								</table>
+
+								<div class="m-2">
+									  <form method="GET">
+											{{medical_examinations_filter.form}}
+									    <button class="btn btn-primary" type="submit">Search</button>
+									  </form>
+								</div>
 							</div>
 							<!-- /.box-content -->
 						</div>

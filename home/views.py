@@ -100,18 +100,18 @@ def home(request):
     home_menu = "home"
     user_logged_in = request.user
 
-    # patient_count = Patient.patient.all().count()
-    # hospital_count = Hospital.hospital.all().count()
+    patient_count = Patient.patient.all().count()
+    hospital_count = Hospital.hospital.all().count()
 
-    # all_hospitals = HospitalProfile.objects.all()
+    all_hospitals = HospitalProfile.objects.all()
 
     context = {
         "title": "Home Page",
         "user_logged_in": user_logged_in,
-        # "patient_count": patient_count,
-        # "all_hospitals": all_hospitals,
+        "patient_count": patient_count,
+        "all_hospitals": all_hospitals,
         "home_menu": home_menu,
-        # "hospital_count": hospital_count,
+        "hospital_count": hospital_count,
     }
 
     return render(request, "home/home.html", context)

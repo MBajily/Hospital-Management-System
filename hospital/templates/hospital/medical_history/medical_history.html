@@ -165,7 +165,7 @@
 								<div class="dropdown js__drop_down">
 									<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
 									<ul class="sub-menu">
-										<li><a href="{% url 'h_add_patient_disease' selected_patient.civil_status.nationality_id %}">New</a></li>
+										<li><a href="{% url 'h_add_medical_test' selected_patient.civil_status.nationality_id %}">New</a></li>
 									</ul>
 									<!-- /.sub-menu -->
 								</div>
@@ -196,6 +196,7 @@
 										{% endfor %}
 									</tbody>
 								</table>
+								
 								<div class="m-2">
 									  <form method="GET">
 											{{medical_examinations_filter.form}}

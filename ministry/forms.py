@@ -95,8 +95,8 @@ class MedicalExaminationForm(forms.ModelForm):
 		fields = ['type', 'report', 'result']
 		widgets = {
 			'type': forms.Select(attrs={'name':'type', 'class': "form-select form-select-lg mb-3", 'required': 'True'}),
-			'report': forms.Textarea(attrs={'class': 'form-control', 'id': 'inputName', 'placeholder': '', 'required': 'False'}),
-			'result': forms.FileInput(attrs={'name':'file', 'id':"input-file-to-destroy", 'class':"dropify", 'data-allowed-formats':"portrait square", 'data-max-file-size':"2M", 'data-max-height':"2000", 'required':'True'})
+			'report': forms.Textarea(attrs={'name':'report', 'class': 'form-control', 'id': 'inputName', 'placeholder': '', 'required': 'False'}),
+			'result': forms.FileInput(attrs={'name':'result', 'id':"input-file-to-destroy", 'class':"dropify", 'required':'True'})
 		}		
 
 

@@ -199,7 +199,7 @@ class Medical_Examination(models.Model):
 	type = models.CharField(max_length=200, choices=Types)
 	report = models.CharField(max_length=1000, null=True, blank=True)
 	date = models.DateField(auto_now_add=True, null=True)
-	result = models.FileField()
+	result = models.FileField(upload_to=MEDIA_ROOT)
 
 	def __str__(self):
 		return self.patient.civil_status.full_name

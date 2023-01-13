@@ -293,3 +293,36 @@ def h_add_patient_disease(request, nationality_id):
 
 	return render(request, 'hospital/medical_history/add_disease.html', context)
 #-----------------------------------------------------
+
+
+#=====================================================
+#=============== Medical Examinations ================
+#=====================================================
+
+#----------------- Add Medical Test ------------------
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['HOSPITAL'])
+def h_add_medical_test(request, nationality_id):
+	main_menu = 'patients'
+	sub_menu = 'all_patients'
+
+	civil_status = Civil_Status.objects.get(nationality_id=nationality_id)
+	selected_patient = PatientProfile.objects.get(civil_status=civil_status)
+
+	if request.method == 'POST':
+		type = request.POST['type']
+		report = request.POST['report']
+		result = request.FILES['result']
+		medical_test = Medical_Examination(patient=selected_patient.user, type=type,
+										result=result, report=report)
+		if medical_test:
+			medical_test.save()
+			return redirect('h_patient_history', nationality_id)
+	else:
+		form = MedicalExaminationForm()
+
+	context = {'title':'Add Medical Test', 'form':form,
+			   'main_menu':main_menu, 'sub_menu':sub_menu}
+
+	return render(request, 'hospital/medical_history/add_medical_test.html', context)
+#-----------------------------------------------------
